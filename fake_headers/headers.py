@@ -1,7 +1,7 @@
 from random import randint as rint
 
 
-def make_header():
+def make_header() -> dict:
     headers = {}
 
     if bool(rint(0, 1)):

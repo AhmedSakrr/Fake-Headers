@@ -5,7 +5,7 @@ with open('README.md', 'r') as f:
 
 setup(
     name="fake-headers",
-    version="1.0.1",
+    version="1.0.2",
     author="TheDevFromKer",
     license="MIT",
     description="Package for generate headers to http requests.",

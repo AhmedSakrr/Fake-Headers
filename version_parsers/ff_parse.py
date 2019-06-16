@@ -1,28 +1,39 @@
 from bs4 import BeautifulSoup
-from requests import get
+from requests import Session
 
-versions = []
-text = get('https://www.mozilla.org/en-US/firefox/releases/').text
-bs = BeautifulSoup(text, 'html5lib')
 
-div = bs.find('div', {'id': 'main-content'})
-table = div.find('ol', {'reversed': ''})
-rows = table.findAll('li')
+def get_text() -> str:
+    with Session() as s:
+        text = s.get('https://www.mozilla.org/en-US/firefox/releases/').text
 
-for row in rows:
-    try:
-        first = row.find('strong')
-        second = first.find('a').text
-        versions.append(second)
+    return text
 
-        first = row.find('ol')
-        second = first.findAll('li')
 
-        for item in second:
-            a = item.find('a').text
-            versions.append(a)
+def parse_versions(html: str) -> list:
+    versions = []
+    bs = BeautifulSoup(html, 'html5lib')
 
-    except Exception:
-        pass
+    main = bs.find('main', {'id': 'main-content'})
+    table = main.find('ol', {'class': 'c-release-list'})
+    rows = table.findAll('li')
 
-print(versions)
+    for row in rows:
+        try:
+            first = row.find('strong')
+            second = first.find('a').text
+            versions.append(second)
+
+            first = row.find('ol')
+            second = first.findAll('li')
+
+            for item in second:
+                a = item.find('a').text
+                versions.append(a)
+
+        except Exception:
+            pass
+
+    return versions
+
+
+print(parse_versions(get_text()))

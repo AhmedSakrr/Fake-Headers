@@ -22,15 +22,16 @@ class Headers:
         'opera': opera
     }
 
-    def __init__(self, browser=None, os=None, headers=False):
+    def __init__(self, browser: str = None, os: str = None,
+                 headers: bool = False):
         self.__platform = self.__os.get(os, random_os)
         self.__browser = self.__browser.get(browser, random_browser)
         self.__headers = make_header if headers else self.empty
 
-    def empty(self):
+    def empty(self) -> dict:
         return {}
 
-    def generate(self):
+    def generate(self) -> dict:
         platform = self.__platform()
         browser = self.__browser()
 
